@@ -9,18 +9,26 @@ const Register: React.FC = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const validationSchema = Yup.object({
+        fullname: Yup.string()
+            .min(2, 'Full name must be at least 2 characters')
+            .required('Full name is required'),
         email: Yup.string()
             .email('Invalid email address')
             .required('Email is required'),
         password: Yup.string()
             .min(8, 'Password must be at least 8 characters')
             .required('Password is required'),
+        bloodGroup: Yup.string()
+            .oneOf(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], 'Invalid blood group')
+            .required('Blood group is required'),
     });
 
     const formik = useFormik({
         initialValues: {
+            fullname: '',
             email: '',
-            password: ''
+            password: '',
+            bloodGroup: '',
         },
         validationSchema,
         onSubmit: async (values) => {
@@ -52,21 +60,20 @@ const Register: React.FC = () => {
                     </div>
 
                     <span className="text-center mb-6">
-                        <h2 className="text-lg md:text-xl font-semibold">Create a new Pulse Aid account</h2>
-                        <p className="text-sm md:text-base">Fill in the details to get started</p>
+                        <h2 className="text-lg md:text-2xl font-semibold">Join Pulse Aid</h2>
+                        <p className="text-sm md:text-base">Your contribution can save up to three lives.</p>
                     </span>
 
                     <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-2 w-full max-w-md">
 
-                        {/* Email */}
                         <div className="flex flex-col space-y-1">
-                            <label htmlFor="email" className="font-semibold">Email address</label>
+                            <label htmlFor="fullname" className="font-semibold">Full name</label>
                             <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="Enter email address"
-                                value={formik.values.email}
+                                type="text"
+                                id="fullname"
+                                name="fullname"
+                                placeholder="Enter full name"
+                                value={formik.values.fullname}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 className={styles.input}
@@ -75,6 +82,50 @@ const Register: React.FC = () => {
                                 <span className="text-red-500 pl-3 text-sm">{formik.errors.email}</span>
                             )}
                         </div>
+
+                        <div className='grid grid-cols-2 gap-4'>
+                            {/* Email */}
+                            <div className="flex flex-col space-y-1">
+                                <label htmlFor="email" className="font-semibold">Email address</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Enter email address"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    className={styles.input}
+                                />
+                                {formik.touched.email && formik.errors.email && (
+                                    <span className="text-red-500 pl-3 text-sm">{formik.errors.email}</span>
+                                )}
+                            </div>
+
+                            {/* Blood group */}
+                            <div>
+                                <label htmlFor="bloodGroup" className="font-semibold">Blood group</label>
+                                <select
+                                    id="bloodGroup"
+                                    name="bloodGroup"
+                                    value={formik.values.bloodGroup}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    className={styles.input}
+                                >
+                                    <option value="">Select blood group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                        </div>
+
 
                         {/* Password */}
                         <div className="relative flex flex-col space-y-1">
@@ -98,31 +149,26 @@ const Register: React.FC = () => {
                             {formik.touched.password && formik.errors.password && (
                                 <span className="text-red-500 pl-3 text-sm">{formik.errors.password}</span>
                             )}
+                            <span className="text-xs text-gray-500 pl-3 mt-1">Minimum 8 characters with one specila symbol.</span>
                         </div>
 
-                        {/* Forgot password */}
-                        <span className="self-end text-primary">
-                            <button type="button" className="font-medium text-sm cursor-pointer">
-                                Forgot Password?
-                            </button>
-                        </span>
 
-                        {/* Divider */}
-                        <div className="flex items-center w-full">
-                            <div className="grow border-t border-gray-300"></div>
-                            <span className="mx-2 text-black text-sm">or</span>
-                            <div className="grow border-t border-gray-300"></div>
+                        <div className="flex gap-4 mt-2">
+                            <label className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    name="userType"
+                                    value="donor"
+                                    checked={formik.values.userType === 'donor'}
+                                    onChange={formik.handleChange}
+                                    className="mr-2"
+                                />
+                                <p className='text-[12px] '>By creating an account, you agree to our <Link to="/terms" className="text-primary font-bold">Terms of Service</Link> and <Link to="/privacy" className="text-primary font-bold">Privacy Policy</Link>.</p>
+                            </label>
                         </div>
 
                         {/* Buttons */}
                         <div className="flex flex-col space-y-6 mt-4">
-                            <button
-                                type="button"
-                                className="bg-[#F0F0F0] font-medium rounded-md h-[45px] flex items-center justify-center gap-2 text-black cursor-pointer"
-                            >
-                                <img src={assets.google} alt="Google" className="h-6 w-auto" />
-                                Sign in with Google
-                            </button>
 
                             <button
                                 type="submit"
@@ -136,38 +182,6 @@ const Register: React.FC = () => {
                             </Link>
                         </div>
                     </form>
-                </div>
-            </div>
-
-            {/* Right side image */}
-            <div className="w-1/2 h-screen hidden md:flex flex-col gap-5 items-center justify-center bg-primary p-7">
-
-                <div className='rounded-[10px] bg-white/40 px-3 py-2 shadow-lg mb-4 '>
-                    <img
-                        src={assets.logo}
-                        alt="Pulse Aid logo"
-                        className="w-auto h-[30px] object-cover"
-                    />
-                </div>
-
-                <h2 className='text-white font-semibold text-4xl text-center '>Empowering Donors,<br /> Saving Lives.</h2>
-                <p className='text-white text-center text-[17px] text-gray-100'>PulseAid connect hero donors to those in urgent needs <br /> making the gift of life simpler and safer than ever before.</p>
-
-                <div className='grid grid-cols-2 gap-3 w-full max-w-md mt-'>
-                    <div className='rounded-[10px] bg-white/40 px-5 py-5'>
-                        <p className='text-2xl font-bold text-white'>2.4+</p>
-                        <p className='text-sm text-gray-100'>Active Donors</p>
-                    </div>
-                    <div className='rounded-[10px] bg-white/40 px-5 py-5'>
-                        <p className='text-2xl font-bold text-white'>150+</p>
-                        <p className='text-sm text-gray-100'>Partner Centers</p>
-                    </div>
-                </div>
-
-                <div className=' max-w-md w-full '>
-                    <img src={assets.professionals} alt="Right side image"
-                    className='w-full h-50 object-cover rounded-br-[10px] rounded-bl-[10px] '
-                     />
                 </div>
             </div>
         </div>
