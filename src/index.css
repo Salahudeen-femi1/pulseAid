@@ -4,11 +4,17 @@
 
 @theme {
   --color-primary: #D93537;
+  --color-secondary: #B51822;
   --color-fadedPrimary: #FFF0EF;
+  --color-thickPrimary: #410004;
   --color-stroke: #E4BEBA;
 }
 
 * {
   font-family: "Lato", sans-serif;
   font-style: normal;
+}
+
+html {
+  scroll-behavior: smooth;
 }
