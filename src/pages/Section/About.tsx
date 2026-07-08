@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { HiUsers } from "react-icons/hi2";
 import { FaHeart } from "react-icons/fa";
 import { PiPlusFill } from "react-icons/pi";

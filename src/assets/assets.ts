@@ -4,6 +4,7 @@ import google from './images/google.png';
 import blooddonation from './images/blooddonation.png';
 import mobile from './images/mobile.png';
 import icon from './images/icon.png';
+import image from './images/image.png';
 
 export const assets = {
     logo,
@@ -12,4 +13,6 @@ export const assets = {
     blooddonation,
     mobile,
     icon,
+    image,
+    logOutGif: image,
 }

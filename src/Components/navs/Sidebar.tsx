@@ -6,9 +6,9 @@ import { MdSettings } from "react-icons/md";
 import { navItems } from "../../lib/navItems";
 import { IoChevronDown } from "react-icons/io5";
 import Modal from "../modal/Modal";
-// import { useUser } from "../../context/UserContext";
 import { FaCaretLeft } from "react-icons/fa6";
 import { getInitials } from "../../helper/utilitty";
+import { useUser } from "../../Contect/userContext";
 
 const Sidebar = ({
   setIsOpen,
@@ -19,7 +19,7 @@ const Sidebar = ({
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   isExpanded: boolean;
 }) => {
-  // const { user, role } = useUser();
+  const { user, role, logout } = useUser();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -30,39 +30,38 @@ const Sidebar = ({
     return activeItem ? activeItem.name : null;
   });
 
-  // const { logout } = useUser();
   const [showLogOutModal, setShowLogOutModal] = useState<boolean>(false);
 
-  // const handleLogout = () => {
-  //   logout();
-  // };
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div
       className={`
-      bg-light-secondary dark:bg-dark-secondary md:border-r border-primary/10 dark:border-light-tetiary/10 h-full ps-2 py-4 lg:pt-2 pt-2.5 flex flex-col
+      bg-primary md:border-r border-primary/10 h-full ps-2 py-4 lg:pt-2 pt-2.5 flex flex-col
       w-full
       ${isExpanded ? "" : ""}
     `}
     >
-      <div className="flex items-center justify-between gap-4 px-2 lg:pt-0 pt-2 pb-2 border-b border-primary/10 dark:border-light-tetiary/10 me-2">
+      <div className="flex items-center justify-between gap-4 px-2 lg:pt-0 pt-2 pb-2 border-b border-stroke me-2">
         <img
-          src={isExpanded ? assets.logo : assets.logo}
-          alt="Payfleet logo"
+          src={isExpanded ? assets.image : assets.image}
+          alt="Pulse Aid logo"
           className={`h-auto object-cover ${isExpanded ? "w-1/2" : "mx-auto w-full"} cursor-pointer`}
           onClick={() => setIsExpanded(!isExpanded)}
         />
         {isExpanded && (
           <button
-            className="bg-light-tetiary dark:bg-dark-tetiary dark:text-light-tetiary w-8 h-8 flex items-center justify-center rounded-full cursor-pointer"
+            className="bg-fadedPrimary  w-8 h-8 flex items-center justify-center rounded-full cursor-pointer"
             onClick={() => setIsExpanded(false)}
           >
-            <FaCaretLeft size={20} />
+            <FaCaretLeft size={20} className="text-primary"/>
           </button>
         )}
       </div>
       <ul
-        className={`${isExpanded ? "ps-4" : "ps-2"} lg:mt-4 mt-4 flex flex-col gap-3 h-4/5 overflow-y-scroll no-scrollbar pb-6`}
+        className={`${isExpanded ? "ps-4" : "ps-2"} lg:mt-4 mt-4 flex flex-col gap-3 h-4/5 overflow-y-hidden no-scrollbar pb-6`}
       >
         {navItems
           .filter((navitem) => navitem.role.includes(role ?? ""))
@@ -79,10 +78,10 @@ const Sidebar = ({
                       end
                       title={item.name}
                       className={({ isActive }) => `
-                      w-[calc(100%-16px)] flex items-center ${isExpanded ? "" : "justify-center"} gap-2 text-black dark:text-light-tetiary border-0 transition-all duration-300 hover:bg-light-tetiary hover:dark:bg-dark-tetiary hover:font-semibold hover:text-primary px-4 py-3 rounded-md cursor-pointer text-xs 
+                      w-[calc(100%-16px)] flex items-center ${isExpanded ? "" : "justify-center"} gap-2 text-white border-0 transition-all duration-300 hover:font-semibold hover:text-primary hover:bg-fadedPrimary px-4 py-3 rounded-md cursor-pointer text-xs 
                       ${
                         isActive
-                          ? "bg-light-tetiary dark:bg-dark-tetiary text-primary font-semibold border border-primary/2"
+                          ? "bg-primary text-white font-semibold border border-primary/2"
                           : ""
                       }
                     `}
@@ -94,16 +93,16 @@ const Sidebar = ({
                       {isExpanded && <span>{item.name}</span>}
                     </NavLink>
                     {isActiveByPath && (
-                      <div className="w-1 rounded-l-full bg-dark-secondary dark:bg-light-secondary"></div>
+                      <div className="w-1 rounded-l-full bg-dark-secondary"></div>
                     )}
                   </div>
                 ) : (
                   <>
                     <div className="flex gap-3">
                       <div
-                        className={`w-[calc(100%-16px)] ${isExpanded ? "justify-between" : "justify-center"} flex items-center gap-3 text-black dark:text-light-tetiary px-4 py-3 hover:bg-light-tetiary hover:dark:bg-dark-tetiary hover:text-primary hover:font-semibold cursor-pointer rounded-md text-xs ${
+                        className={`w-[calc(100%-16px)] ${isExpanded ? "justify-between" : "justify-center"} flex items-center gap-3 text-black px-4 py-3 hover:bg-fadedPrimary hover:text-primary hover:font-semibold cursor-pointer rounded-md text-xs ${
                           isOpen &&
-                          "bg-light-tetiary dark:bg-dark-tetiary text-primary font-semibold border border-primary/2"
+                          "bg-primary text-white font-semibold border border-primary/2"
                         }`}
                         title={item.name}
                         onClick={() => setOpenMenu(isOpen ? null : item.name)}
@@ -169,7 +168,7 @@ const Sidebar = ({
           <NavLink
             to="/dashboard/settings"
             className={({ isActive }) =>
-              `flex items-center gap-3 text-black dark:text-light-tetiary transition-all duration-300 px-4 py-3 rounded-md border-none cursor-pointer text-xs hover:bg-light-tetiary hover:dark:bg-dark-tetiary hover:font-semibold hover:text-primary ${
+              `flex items-center gap-3 text-white transition-all duration-300 px-4 py-3 rounded-md border-none cursor-pointer text-xs hover:bg-fadedPrimary hover:font-semibold hover:text-primary${
                 isActive
                   ? "bg-light-tetiary dark:bg-dark-tetiary text-primary font-semibold border border-primary/5"
                   : ""
@@ -188,7 +187,7 @@ const Sidebar = ({
           <div
             className={`flex items-center gap-2 text-xs ${isExpanded ? "w-3/4" : "w-full justify-center"}`}
           >
-            <span className="w-8 h-8 group-hover:bg-light-secondary bg-light-tetiary dark:bg-dark-tetiary text-primary flex items-center justify-center font-extrabold rounded-full">
+            <span className="w-8 h-8 group-hover:bg-light-secondary bg-white text-primary flex items-center justify-center font-extrabold rounded-full">
               {getInitials(
                 user?.name?.split(" ")?.[0] ?? "C",
                 user?.name?.split(" ")?.[1] ?? "N",
@@ -203,7 +202,7 @@ const Sidebar = ({
           {isExpanded && (
             <button
               onClick={() => setShowLogOutModal(true)}
-              className="text-black dark:text-light-tetiary w-8 h-8 flex items-center justify-center rounded-full hover:text-red-500 cursor-pointer text-xs"
+              className="text-white w-8 h-8 flex items-center justify-center rounded-full cursor-pointer text-xs"
             >
               <FiLogOut size={16} />
             </button>

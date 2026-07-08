@@ -3,9 +3,9 @@ import { IoChevronDown } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { PiUser, PiGear, PiSignOut } from "react-icons/pi";
 import { assets } from "../../assets/assets";
-import { useUser } from "../../context/UserContext";
-import { getInitials } from "../../helpers/formatterUtility";
-import ThemeToggle from "../ui/ThemeToggle";
+import { getInitials } from "../../helper/utilitty";
+import { useUser } from "../../Contect/userContext";
+// import ThemeToggle from "../ui/ThemeToggle";
 
 interface TopNavProps {
   showSearchBar?: boolean;
@@ -22,17 +22,17 @@ const TopNav: React.FC<TopNavProps> = () => {
   };
 
   return (
-    <div className="w-full py-2.5 flex gap-3 items-center justify-between">
+    <div className="w-full bg-fadedPrimary py-2.5 flex gap-3 items-center justify-between">
       <div className=""></div>
 
       <div className="flex gap-4 items-center">
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
 
         {/* Profile Dropdown */}
         <div className="relative" ref={profileRef}>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 border-l border-primary/10 dark:border-light-tetiary/10 dark:text-light-tetiary ps-4 hover:opacity-80 transition"
+            className="flex items-center gap-2 border-l border-primary/10 dark:border-light-tetiary/10 ps-4 hover:opacity-80 transition"
           >
             <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-primary/20 dark:ring-primary">
               {user?.role === "admin" ? (

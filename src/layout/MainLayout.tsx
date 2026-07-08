@@ -2,6 +2,8 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import Sidebar from "../Components/navs/Sidebar";
+import TopNav from "../Components/navs/TopNav";
+import { HiBars3 } from "react-icons/hi2";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -15,7 +17,7 @@ const MainLayout = ({
   showSearchBar
 }: LayoutProps) => {
   useEffect(() => {
-    document.title = "PayFleet - " + pageName;
+    document.title = "Pulse Aid - " + pageName;
   }, [pageName]);
 
   const location = useLocation();
@@ -102,7 +104,6 @@ const MainLayout = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
   return (
-    <ProtectedRoute>
       <div className="flex w-full relative! bg-light-secondary dark:bg-dark-secondary h-dvh overflow-hidden">
         {
           isOpen && (
@@ -122,9 +123,9 @@ const MainLayout = ({
             isExpanded={isExpanded}
           />
         </div>
-        <div className={`${isExpanded ? "lg:w-[77%]" : "w-full"} w-full overflow-hidden pt-2 pb-12`}>
+        <div className={`${isExpanded ? "lg:w-[77%]" : "w-full"} w-full overflow-hidden`}>
           {/* Top Nav */}
-          <div className="lg:px-6 px-4 flex gap-4 sticky top-0 z-10 items-center border-b border-primary/10 dark:border-light-tetiary/10">
+          <div className="lg: px- flex gap-4 sticky top-0 z-10 items-center border-b border-primary/10 dark:border-light-tetiary/10">
             <button
               type="button"
               className="md:hidden inline-block text-dark-secondary/70 dark:text-light-tetiary"
@@ -138,7 +139,7 @@ const MainLayout = ({
           </div>
           <div
             ref={mainContentRef}
-            className="my-4 md:pb-10 pb-5 md:h-[calc(100%-5vh)] h-[calc(100%-(5vh))] overflow-y-scroll no-scrollbar"
+            className="md:pb-10 pb-5 md:h-[calc(100%-5vh)] h-[calc(100%-(5vh))] overflow-y-scroll no-scrollbar"
             style={{
               minHeight: "0",
               WebkitOverflowScrolling: "touch",
@@ -157,7 +158,7 @@ const MainLayout = ({
                   display: "flex",
                   flexDirection: "column",
                 }}
-                className="lg:px-6 px-4"
+                className="bg-[#f6efef]"
               >
                 {children}
               </motion.div>
@@ -165,7 +166,6 @@ const MainLayout = ({
           </div>
         </div>
       </div>
-    </ProtectedRoute>
   );
 };
 

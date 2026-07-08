@@ -1,4 +1,3 @@
-import React from 'react'
 import HeroSection from './Section/HeroSection'
 import NavBar from '../Components/navs/NavBar'
 import Eligibilty from './Section/Eligibilty'

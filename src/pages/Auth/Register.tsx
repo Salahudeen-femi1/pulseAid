@@ -27,6 +27,7 @@ const Register: React.FC = () => {
         age: Yup.number().required('Age is required'),
         weight: Yup.number().required('Weight is required'),
         lastDonation: Yup.string().required('Last donation date is required'),
+        userType: Yup.string().oneOf(['donor'], 'User type is required'),
     });
 
     const formik = useFormik({
@@ -41,6 +42,7 @@ const Register: React.FC = () => {
             age: '',
             weight: '',
             lastDonation: '',
+            userType: '',
         },
         validationSchema,
         onSubmit: async (values) => {

@@ -1,9 +1,10 @@
 import { FiSettings } from "react-icons/fi";
 import { MdDashboard } from "react-icons/md";
 import { MdBloodtype } from "react-icons/md";
-import profileIcon from '../assets/profileIcon.png'
+import { CgProfile } from "react-icons/cg";
+import type { NavItem } from "./interfaces";
 
-export const navItems = [
+export const navItems: NavItem[] = [
     {
         name: "Dashboard",
         icon: MdDashboard,
@@ -24,7 +25,7 @@ export const navItems = [
     },
     {
         name: 'Profile',
-        icon: profileIcon,
+        icon: CgProfile,
         path: "/dashboard/profile",
         role:"admin"
     },
