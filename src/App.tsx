@@ -5,8 +5,8 @@ import { Toaster } from 'sonner'
 import Register from './pages/Auth/Register'
 import Home from './pages/Home'
 import MainLayout from './layout/MainLayout'
-import Dashboard from './pages/dashboard/Dashboard'
 import UserDashboard from './pages/dashboard/UserDashboard'
+import Dashboard from './pages/dashboard/UserDashboard'
 
 function App() {
 
