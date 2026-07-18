@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
 
-interface Props{
+interface Props {
 
-    title:string;
-    value:string;
-    subtitle?:string;
-    progress?:number;
-    icon?:ReactNode;
-    color?:string;
+    title: string;
+    value: string;
+    subtitle?: string;
+    progress?: number;
+    icon?: ReactNode;
+    color?: string;
+    description?: string;
 
 }
 
@@ -17,11 +18,12 @@ export default function StatCard({
     value,
     subtitle,
     progress,
-    icon
+    icon,
+    description
 
-}:Props){
+}: Props) {
 
-    return(
+    return (
 
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
 
@@ -33,9 +35,13 @@ export default function StatCard({
                         {title}
                     </p>
 
-                    <h2 className="text-3xl font-bold mt-2">
+                    <h2 className="text-2xl font-bold mt-2">
                         {value}
                     </h2>
+
+                    <p className="text-green-600 mt-2 text-sm">
+                        {description}
+                    </p>
 
                     {subtitle &&
                         <p className="text-gray-500 text-sm mt-2">
@@ -59,7 +65,7 @@ export default function StatCard({
 
                         <div
                             className="bg-red-500 h-full rounded-full"
-                            style={{width:`${progress}%`}}
+                            style={{ width: `${progress}%` }}
                         />
 
                     </div>

@@ -19,9 +19,15 @@ const Sidebar = ({
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   isExpanded: boolean;
 }) => {
-  const { user, role, logout } = useUser();
+  const { user,  logout } = useUser();
   const location = useLocation();
   const currentPath = location.pathname;
+  // const currentRole = (role ?? user?.role ?? "user").toLowerCase();
+
+  // const matchesRole = (allowedRoles: string | string[]) => {
+  //   const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
+  //   return roles.some((itemRole) => itemRole.toLowerCase() === currentRole);
+  // };
 
   const [openMenu, setOpenMenu] = useState<string | null>(() => {
     const activeItem = navItems.find((item) =>
@@ -64,7 +70,7 @@ const Sidebar = ({
         className={`${isExpanded ? "ps-4" : "ps-2"} lg:mt-4 mt-4 flex flex-col gap-3 h-4/5 overflow-y-hidden no-scrollbar pb-6`}
       >
         {navItems
-          .filter((navitem) => navitem.role.includes(role ?? ""))
+          // .filter((navitem) => matchesRole(navitem.role))
           .map((item, index) => {
             const isOpen = openMenu === item.name;
             const isActiveByPath = currentPath === item.path;

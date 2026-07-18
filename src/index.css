@@ -7,12 +7,24 @@
   --color-secondary: #B51822;
   --color-fadedPrimary: #FFF0EF;
   --color-thickPrimary: #410004;
-  --color-stroke: #E4BEBA;
+  --color-stroke: #E4BEBA;  
+  --color-tableHeading: #414141;
+  --color-tableData: #191717;
+  --color-fadedBlack: #fbfcfb;
+  --color-tableBorder: #e8e8e8;
 }
 
 * {
   font-family: "Lato", sans-serif;
   font-style: normal;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  @apply hidden;
+}
+
+.styled-scrollbar::-webkit-scrollbar {
+  @apply w-1 h-1;
 }
 
 html {

@@ -1,9 +1,9 @@
 import { CalendarDays, Droplets, HeartPulse } from "lucide-react";
 import WelcomeCard from "../../card/WelcomeCard";
-import StatCard from "../../card/StatsCard";
+import StatCard from "../../card/StatCard";
 import RecentActivity from "../../card/RecentActivity";
 
-export default function Dashboard() {
+export default function UserDashboard() {
 
     return (
         <main className="bg-[#FCF7F7] min-h-screen">
