@@ -17,9 +17,9 @@ export const navItems: NavItem[] = [
         // role: 'admin',
     },
     {
-        name: 'Donation centers',
+        name: 'Donors',
         icon: MdBloodtype,
-        path: "/dashboard/donationCenters",
+        path: "/admin/donors",
         // role: ["user", "admin"]
     },
     {

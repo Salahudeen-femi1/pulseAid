@@ -8,7 +8,7 @@ import { IoChevronDown } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import { FaCaretLeft } from "react-icons/fa6";
 import { getInitials } from "../../helper/utilitty";
-import { useUser } from "../../Contect/userContext";
+import { useUser } from "../../Context/userContext";
 
 const Sidebar = ({
   setIsOpen,

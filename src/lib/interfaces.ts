@@ -58,5 +58,31 @@ export interface PaginationControlProps {
   tableType?: string;
 }
 
+export interface Donor {
+    id:number;
+    name:string;
+    bloodGroup:
+        | "A+"
+        | "A-"
+        | "B+"
+        | "B-"
+        | "AB+"
+        | "AB-"
+        | "O+"
+        | "O-";
+    avatar:string;
+    available:boolean;
+    distance:number;
+    location:string;
+    bio:string;
+
+}
+
+export interface Filters {
+    bloodGroup:string | null;
+    radius:number;
+    available:boolean;
+}
+
 
 

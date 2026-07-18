@@ -27,7 +27,7 @@ export default function Dashboard() {
             label: "Blood Group",
             key: "blood_group",
             render: (item: any) => (
-                <span className={`px-2 py-1 rounded-full text-white ${item.blood_group === "A+" ? "bg-red-500 text-red-100" : item.blood_group === "B-" ? "bg-blue-500 t" : item.blood_group === "O+" ? "bg-green-500" : "bg-gray-500"}`}>
+                <span className={`px-2 py-1 rounded-xl font-medium ${item.blood_group === "A+" ? "bg-red-200 text-red-500" : item.blood_group === "B-" ? "bg-blue-200 text-blue-500" : item.blood_group === "O+" ? "bg-green-200 text-green-500" : "bg-gray-200 text-gray-500"}`}>
                     {item.blood_group}
                 </span>
             )

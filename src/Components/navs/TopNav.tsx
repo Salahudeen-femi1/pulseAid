@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { PiUser, PiGear, PiSignOut } from "react-icons/pi";
 import { assets } from "../../assets/assets";
 import { getInitials } from "../../helper/utilitty";
-import { useUser } from "../../Contect/userContext";
+import { useUser } from "../../Context/userContext";
 // import ThemeToggle from "../ui/ThemeToggle";
 
 interface TopNavProps {

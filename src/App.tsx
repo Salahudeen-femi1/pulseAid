@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import MainLayout from './layout/MainLayout'
 import UserDashboard from './pages/dashboard/UserDashboard'
 import Dashboard from './pages/dashboard/Dashboard'
+import Donors from './pages/dashboard/Donors'
 
 function App() {
 
@@ -29,6 +30,13 @@ function App() {
             pageName="Dashboard"
           >
             <Dashboard />
+          </MainLayout>}
+        />
+        <Route path="/admin/donors" element={
+          <MainLayout
+            pageName="Donors"
+          >
+            <Donors />
           </MainLayout>}
         />
 

@@ -1,6 +1,6 @@
 export default function CenterCard() {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border p-5">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
 
       <h2 className="text-xl font-semibold">
         Active Centers
