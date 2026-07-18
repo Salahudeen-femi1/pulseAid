@@ -1,7 +1,7 @@
 import BloodGroupFilter from "./BloodGroupFilter";
 import RadiusSlider from "./RadiusSlider";
-import AvailabilityToggle from "./AvailabilityToggle";
 import DonorStats from "./DonorStats";
+import AvailabilityToggle from "./AvailabiityToggle";
 
 interface FilterSidebarProps {
   bloodGroup: string | null;
