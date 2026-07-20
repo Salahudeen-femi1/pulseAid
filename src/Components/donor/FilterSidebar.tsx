@@ -1,4 +1,4 @@
-import BloodGroupFilter from "./BloodGroupFilter";
+
 import RadiusSlider from "./RadiusSlider";
 import DonorStats from "./DonorStats";
 import AvailabilityToggle from "./AvailabiityToggle";
@@ -14,7 +14,6 @@ interface FilterSidebarProps {
 }
 
 export default function FilterSidebar({
-  bloodGroup,
   radius,
   available,
   setBloodGroup,
@@ -28,7 +27,7 @@ export default function FilterSidebar({
   };
 
   return (
-    <aside className="rounded-2xl border bg-white p-6 shadow-sm">
+    <aside className="rounded-md bg-fadedPrimary p-6 h-[600px]">
       <div className="mb-8 flex items-center justify-between">
         <h2 className="text-xl font-semibold">
           Filters
@@ -44,10 +43,7 @@ export default function FilterSidebar({
       </div>
 
       <div className="space-y-8">
-        <BloodGroupFilter
-          selected={bloodGroup}
-          onSelect={setBloodGroup}
-        />
+       
 
         <RadiusSlider
           radius={radius}

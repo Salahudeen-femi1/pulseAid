@@ -1,22 +1,20 @@
-import React from 'react'
 import DonorCard from "../../card/DonorCard";
 import type { Donor } from "../../lib/interfaces";
-import DonorSkeleton from "../skeleton/DonorSkeleton";
-import EmptyState from './EmptyState';
+import EmptyState from "./EmptyState";
 
 interface DonorGridProps {
   donors: Donor[];
   view: "grid" | "list";
+  onContact: (donor: Donor) => void;
+  onViewProfile: (donor: Donor) => void;
 }
 
 export default function DonorGrid({
   donors,
   view,
-}: DonorGridProps)
-{
-  
-  const [loading] = React.useState(true)
-
+  onContact,
+  onViewProfile,
+}: DonorGridProps) {
   if (view === "list") {
     return (
       <div className="space-y-5">
@@ -24,17 +22,9 @@ export default function DonorGrid({
           <DonorCard
             key={donor.id}
             donor={donor}
+            onContact={onContact}
+            onViewProfile={onViewProfile}
           />
-        ))}
-      </div>
-    );
-  }
-  
-  if (loading) {
-    return (
-      <div className="grid gap-6 lg:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <DonorSkeleton key={index} />
         ))}
       </div>
     );
@@ -50,6 +40,8 @@ export default function DonorGrid({
         <DonorCard
           key={donor.id}
           donor={donor}
+          onContact={onContact}
+          onViewProfile={onViewProfile}
         />
       ))}
     </div>

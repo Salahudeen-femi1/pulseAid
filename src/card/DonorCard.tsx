@@ -6,21 +6,25 @@ import ContactButton from "../button/ContactButton";
 
 interface DonorCardProps {
   donor: Donor;
+  onContact?: (donor: Donor) => void;
+  onViewProfile?: (donor: Donor) => void;
 }
 
 export default function DonorCard({
   donor,
+  onContact,
+  onViewProfile,
 }: DonorCardProps) {
   const handleContact = () => {
-    alert(`Contacting ${donor.name}`);
+    onContact?.(donor);
   };
 
   const handleProfile = () => {
-    alert(`Viewing ${donor.name}`);
+    onViewProfile?.(donor);
   };
 
   return (
-    <div className="rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md">
+    <div className="rounded-md bg-white p-6 shadow-sm transition hover:shadow-md">
       {/* Header */}
       <div className="flex items-start justify-between">
         <img

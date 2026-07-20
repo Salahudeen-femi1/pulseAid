@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone } from "lucide-react";
+import { MapPin } from "lucide-react";
 import Modal from "./Modal";
 import type { Donor } from "../../lib/interfaces";
 
@@ -8,7 +8,7 @@ interface Props {
   onClose: () => void;
 }
 
-export default function ContactModal({
+export default function DonorProfileModal({
   donor,
   open,
   onClose,
@@ -33,17 +33,6 @@ export default function ContactModal({
               <MapPin size={16} />
               <span>{donor.location}</span>
             </div>
-          </div>
-        </div>
-
-        <div className="mt-8 space-y-3 text-sm text-gray-700">
-          <div className="flex items-center gap-2">
-            <Phone size={16} />
-            <span>Available for urgent blood donation requests</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Mail size={16} />
-            <span>Contact through the PulseAid request flow</span>
           </div>
         </div>
 

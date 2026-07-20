@@ -22,7 +22,7 @@ export default function AvailabilityToggle({
             <button
                 type="button"
                 onClick={() => setChecked(!checked)}
-                className={`relative h-6 w-11 rounded-full transition ${checked ? "bg-red-600" : "bg-gray-300"
+                className={`relative h-6 w-11 rounded-full transition ${checked ? "bg-green-600" : "bg-gray-300"
                     }`}
             >
                 <span

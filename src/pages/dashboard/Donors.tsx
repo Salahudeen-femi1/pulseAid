@@ -7,7 +7,7 @@ import useDonorFilters from "../../helper/useDonorFilters";
 import { donors as donorData } from "../../helper/donors";
 import type { Donor } from "../../lib/interfaces";
 import ContactModal from "../../Components/modal/ContactModal";
-import DonorProfileModal from "../../Components/modal/ContactModal";
+import DonorProfileModal from "../../Components/modal/DonorProfileModal";
 import Pagination from "../../Components/donor/Pagination";
 
 export default function FindDonors() {
@@ -82,11 +82,11 @@ export default function FindDonors() {
                         <DonorGrid
                             donors={paginatedDonors}
                             view={view}
-                            onContact={(donor) => {
+                            onContact={(donor: Donor) => {
                                 setSelectedDonor(donor);
                                 setContactOpen(true);
                             }}
-                            onViewProfile={(donor: any) => {
+                            onViewProfile={(donor: Donor) => {
                                 setSelectedDonor(donor);
                                 setProfileOpen(true);
                             }}
