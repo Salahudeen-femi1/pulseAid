@@ -22,7 +22,7 @@ const Register: React.FC = () => {
                 toast.success("Registration successful")
                 console.log("login response", response)
 
-                navigate('/Login')
+                navigate('/EmailVerification')
             },
             onError: (error) => {
                 toast.error(error?.response?.data?.message || "Something went wrong")
