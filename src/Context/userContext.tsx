@@ -52,7 +52,7 @@ export default function UserProvider({ children }: UserProviderProps) {
             if (!authToken) throw new Error("No token");
 
             try {
-                const response = await api.get("/", {
+                const response = await api.get("/v1/auth/refresh", {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                     },

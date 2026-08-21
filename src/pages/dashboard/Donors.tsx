@@ -47,11 +47,11 @@ export default function FindDonors() {
                 {/* Page Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-5xl font-bold text-gray-900">
+                        <h1 className="text-3xl font-bold text-gray-900">
                             Available Donors Near You
                         </h1>
 
-                        <p className="mt-3 text-gray-500">
+                        <p className="mt-2 text-gray-500">
                             Connect with voluntary donors in your community.
                         </p>
                     </div>
@@ -97,12 +97,6 @@ export default function FindDonors() {
                             totalPages={totalPages}
                             onPageChange={setPage}
                         />
-
-                        {/* <div className="mt-8">
-                            <StatCard
-                                total={1240}
-                            />
-                        </div> */}
                     </div>
                 </div>
             </div>

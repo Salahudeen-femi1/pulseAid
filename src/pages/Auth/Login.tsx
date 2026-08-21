@@ -3,10 +3,45 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { assets } from '../../assets/assets';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '../../Context/userContext';
+import { useMutation } from '@tanstack/react-query'
+import { loginService } from '../../helper/authService';
+import { toast } from 'sonner';
 
 const Login: React.FC = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
+
+    const { login } = useUser()
+    const navigate = useNavigate()
+    const mutation = useMutation<
+        { token: string; user: { role: string } },
+        unknown,
+        { email: string; password: string }
+    >({
+        mutationFn: loginService,
+        onSuccess: async (response) => {
+            toast.success("Login successfully")
+            console.log("login response", response)
+
+            await login(
+                response.token,
+                response.user,
+                response.user.role
+            )
+
+            if (response.user.role === "donor") {
+                navigate("/dashboard");
+            } else {
+                navigate("/admin/dashboard");
+            }
+        },
+        onError: (error) => {
+            toast.error(error?.response?.data?.message || "Something went wrong")
+            console.log('registration error:', error)
+        }
+
+    })
 
     const validationSchema = Yup.object({
         email: Yup.string()
@@ -23,8 +58,11 @@ const Login: React.FC = () => {
             password: ''
         },
         validationSchema,
-        onSubmit: async (values) => {
-            console.log('Form values:', values);
+        onSubmit: async (values, { setSubmitting }) => {
+            setSubmitting(true)
+            mutation.mutate(values, {
+                onSettled: () => setSubmitting(false),
+            })
         },
     });
 
@@ -166,8 +204,8 @@ const Login: React.FC = () => {
 
                 <div className=' max-w-md w-full '>
                     <img src={assets.professionals} alt="Right side image"
-                    className='w-full h-50 object-cover rounded-br-[10px] rounded-bl-[10px] '
-                     />
+                        className='w-full h-50 object-cover rounded-br-[10px] rounded-bl-[10px] '
+                    />
                 </div>
             </div>
         </div>

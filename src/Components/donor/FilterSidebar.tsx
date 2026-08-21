@@ -27,7 +27,7 @@ export default function FilterSidebar({
   };
 
   return (
-    <aside className="rounded-md bg-fadedPrimary p-6 h-[600px]">
+    <aside className="rounded-md bg-fadedPrimary p-6 h-full">
       <div className="mb-8 flex items-center justify-between">
         <h2 className="text-xl font-semibold">
           Filters

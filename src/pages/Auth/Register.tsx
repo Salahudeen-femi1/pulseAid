@@ -2,52 +2,91 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { assets } from '../../assets/assets';
+import { useMutation } from '@tanstack/react-query';
+import { registerService } from '../../helper/authService';
+import type { UserProps } from '../../Context/userContext';
+import { toast } from 'sonner';
+import type { RegisterFormValues } from '../../lib/interfaces';
 
 const Register: React.FC = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
+    const navigate = useNavigate()
+
+    const mutation = useMutation<
+        { message?: string; token: string; user?: UserProps; role?: string; }, Error, RegisterFormValues>({
+            mutationFn: registerService,
+            onSuccess: async (response) => {
+                toast.success("Registration successful")
+                console.log("login response", response)
+
+                navigate('/Login')
+            },
+            onError: (error) => {
+                toast.error(error?.response?.data?.message || "Something went wrong")
+                console.log('registration error:', error)
+            }
+
+        })
+
     const validationSchema = Yup.object({
-        fullname: Yup.string()
-            .min(2, 'Full name must be at least 2 characters')
-            .required('Full name is required'),
+        firstName: Yup.string()
+            .min(2, 'First name must be at least 2 characters')
+            .required('First name is required'),
+        lastName: Yup.string()
+            .min(2, 'Last name must be at least 2 characters')
+            .required('Last name is required'),
         email: Yup.string()
             .email('Invalid email address')
             .required('Email is required'),
         password: Yup.string()
             .min(8, 'Password must be at least 8 characters')
             .required('Password is required'),
-        bloodGroup: Yup.string()
-            .oneOf(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], 'Invalid blood group')
-            .required('Blood group is required'),
-        phoneNumber: Yup.number().required('Phone number is required'),
-        address: Yup.string().required('Address is required'),
-        defection: Yup.string().required('Do you have any defection'),
-        age: Yup.number().required('Age is required'),
-        weight: Yup.number().required('Weight is required'),
-        lastDonation: Yup.string().required('Last donation date is required'),
-        userType: Yup.string().oneOf(['donor'], 'User type is required'),
+        phone: Yup.number().required('Phone number is required'),
+        role: Yup.string().oneOf(['donor', "hospital", "admin"], 'Please select a role')
+            .required('Please select a role'),
     });
 
-    const formik = useFormik({
+    const formatNigerianPhone = (phone: string) => {
+        const cleaned = phone.replace(/\s|-/g, "");
+
+        if (cleaned.startsWith('0')) {
+            return `+234${cleaned.slice(1)}`;
+        }
+
+        if (cleaned.startsWith('234')) {
+            return `+${cleaned}`;
+        }
+
+        return cleaned;
+
+    }
+
+    // const validationSchema = () => {
+    //     if()
+    // }
+
+    const formik = useFormik<RegisterFormValues>({
         initialValues: {
-            fullname: '',
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
-            bloodGroup: '',
-            phoneNumber: '',
-            address: '',
-            defection: '',
-            age: '',
-            weight: '',
-            lastDonation: '',
-            userType: '',
+            phone: '',
+            role: '',
         },
         validationSchema,
         onSubmit: async (values) => {
+            const payload = {
+                ...values,
+                phone: formatNigerianPhone(values.phone),
+                role: values.role.toUpperCase()
+            }
+            mutation.mutate(payload)
             console.log('Form values:', values);
-        },
+        }
     });
 
     const styles = {
@@ -82,22 +121,60 @@ const Register: React.FC = () => {
                         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
 
                             <div className="flex flex-col space-y-1">
-                                <label htmlFor="fullname" className="font-semibold">Full name</label>
+                                <label htmlFor="firstName" className="font-semibold">First name</label>
                                 <input
                                     type="text"
-                                    id="fullname"
-                                    name="fullname"
-                                    placeholder="Enter full name"
-                                    value={formik.values.fullname}
+                                    id="firstName"
+                                    name="firstName"
+                                    placeholder="Enter First name"
+                                    value={formik.values.firstName}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     className={styles.input}
                                 />
-                                {formik.touched.email && formik.errors.email && (
-                                    <span className="text-red-500 pl-3 text-sm">{formik.errors.email}</span>
+                                {formik.touched.firstName && formik.errors.firstName && (
+                                    <span className="text-red-500 pl-3 text-sm">{formik.errors.firstName}</span>
                                 )}
                             </div>
-                            {/* Email */}
+                            {/* last name */}
+                            <div className="flex flex-col space-y-1">
+                                <label htmlFor="lastName" className="font-semibold">Last Name</label>
+                                <input
+                                    type="text"
+                                    id="lastName"
+                                    name="lastName"
+                                    placeholder="Enter last name"
+                                    value={formik.values.lastName}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    className={styles.input}
+                                />
+                                {formik.touched.lastName && formik.errors.lastName && (
+                                    <span className="text-red-500 pl-3 text-sm">{formik.errors.lastName}</span>
+                                )}
+                            </div>
+
+
+
+                            <div className="flex flex-col space-y-1">
+                                <label htmlFor="phone" className="font-semibold">Phone number</label>
+                                <input
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Enter your phone number"
+                                    value={formik.values.phone}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    className={`${styles.input} appearance-none`}
+                                />
+                                {formik.touched.phone && formik.errors.phone && (
+                                    <span className="text-red-500 pl-3 text-sm">{formik.errors.phone}</span>
+                                )}
+                            </div>
+
+                            {/* email */}
+
                             <div className="flex flex-col space-y-1">
                                 <label htmlFor="email" className="font-semibold">Email address</label>
                                 <input
@@ -114,177 +191,81 @@ const Register: React.FC = () => {
                                     <span className="text-red-500 pl-3 text-sm">{formik.errors.email}</span>
                                 )}
                             </div>
-
-                            <div className='grid grid-cols-2 lg:grid-cols-2 gap-3'>
-                                <div>
-                                    <label htmlFor="defection" className="font-semibold">Any defection?</label>
-                                    <select
-                                        id="defection"
-                                        name="defection"
-                                        value={formik.values.defection}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        className={styles.input}
-                                    >
-                                        <option value="">Select an option</option>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
-                                    {formik.touched.defection && formik.errors.defection && (
-                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.defection}</span>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label htmlFor="bloodGroup" className="font-semibold">Blood group</label>
-                                    <select
-                                        id="bloodGroup"
-                                        name="bloodGroup"
-                                        value={formik.values.bloodGroup}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        className={styles.input}
-                                    >
-                                        <option value="">Select blood group</option>
-                                        <option value="A+">A+</option>
-                                        <option value="A-">A-</option>
-                                        <option value="B+">B+</option>
-                                        <option value="B-">B-</option>
-                                        <option value="AB+">AB+</option>
-                                        <option value="AB-">AB-</option>
-                                        <option value="O+">O+</option>
-                                        <option value="O-">O-</option>
-                                    </select>
-                                </div>
-
-                            </div>
-
-                            <div className='grid grid-cols-2 lg:grid-cols-2 gap-3'>
-                                <div className="flex flex-col space-y-1">
-                                    <label htmlFor="age" className="font-semibold">Age</label>
-                                    <input
-                                        type="text"
-                                        id="age"
-                                        name="age"
-                                        placeholder="Enter your age"
-                                        value={formik.values.age}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        className={styles.input}
-                                    />
-                                    {formik.touched.age && formik.errors.age && (
-                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.age}</span>
-                                    )}
-                                </div>
-                                <div>
-                                    <label htmlFor="search" className='font-semibold text-sm'> Last time you Donated Blood?</label>
-                                    <input
-                                        type="text"
-                                        id='search'
-                                        name='lastDonation'
-                                        placeholder='Enter date of last donation'
-                                        value={formik.values.lastDonation}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        className={styles.input}
-                                    />
-                                    {formik.touched.lastDonation && formik.errors.lastDonation && (
-                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.lastDonation}</span>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label htmlFor="address" className="font-semibold">Residential Address</label>
-                                <textarea
-                                    id="address"
-                                    name="address"
-                                    rows={2}
-                                    placeholder="Enter your address"
-                                    value={formik.values.address}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    className={`${styles.input} resize-none py-2`}
-                                />
-                                {formik.touched.address && formik.errors.address && (
-                                    <span className="text-red-500 pl-3 text-sm">{formik.errors.address}</span>
-                                )}
-                            </div>
-                            <div className='grid grid-cols-2 lg:grid-cols-2 gap-3'>
-                                <div className="flex flex-col space-y-1">
-                                    <label htmlFor="phoneNumber" className="font-semibold">Phone number</label>
-                                    <input
-                                        type="text"
-                                        id="phoneNumber"
-                                        name="phoneNumber"
-                                        placeholder="Enter your phone number"
-                                        value={formik.values.phoneNumber}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        className={`${styles.input} appearance-none`}
-                                    />
-                                    {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.phoneNumber}</span>
-                                    )}
-                                </div>
-
-                                <div className="flex flex-col space-y-1">
-                                    <label htmlFor="weight" className="font-semibold">Weight</label>
-                                    <input
-                                        type="text"
-                                        id="weight"
-                                        name="weight"
-                                        placeholder="Enter your weight"
-                                        value={formik.values.weight}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        className={styles.input}
-                                    />
-                                    {formik.touched.weight && formik.errors.weight && (
-                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.weight}</span>
-                                    )}
-                                </div>
-                            </div>
-
-
-                            {/* Password */}
-                            <div className="relative flex flex-col space-y-1">
-                                <label htmlFor="password" className="font-semibold">Password</label>
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    id="password"
-                                    name="password"
-                                    placeholder="Enter password"
-                                    value={formik.values.password}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    className={styles.input}
-                                />
-                                <span
-                                    className="absolute right-4 top-11 cursor-pointer text-black"
-                                    onClick={() => setShowPassword(prev => !prev)}
-                                >
-                                    {showPassword ? <FiEye size={18} /> : <FiEyeOff size={18} />}
-                                </span>
-                                {formik.touched.password && formik.errors.password && (
-                                    <span className="text-red-500 pl-3 text-sm">{formik.errors.password}</span>
-                                )}
-                                <span className="text-xs text-gray-500 pl-3 mt-1">Minimum 8 characters with one specila symbol.</span>
-                            </div>
                         </div>
 
-                        <div className="flex gap-4 mt-2">
-                            <label className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    name="userType"
-                                    value="donor"
-                                    checked={formik.values.userType === 'donor'}
-                                    onChange={formik.handleChange}
-                                    className="mr-2"
-                                />
-                                <p className='text-[12px] '>By creating an account, you agree to our <Link to="/terms" className="text-primary font-bold">Terms of Service</Link> and <Link to="/privacy" className="text-primary font-bold">Privacy Policy</Link>.</p>
+                        {/* Password */}
+                        <div className="relative flex flex-col space-y-1">
+                            <label htmlFor="password" className="font-semibold">Password</label>
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                id="password"
+                                name="password"
+                                placeholder="Enter password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={styles.input}
+                            />
+                            <span
+                                className="absolute right-4 top-11 cursor-pointer text-black"
+                                onClick={() => setShowPassword(prev => !prev)}
+                            >
+                                {showPassword ? <FiEye size={18} /> : <FiEyeOff size={18} />}
+                            </span>
+                            {formik.touched.password && formik.errors.password && (
+                                <span className="text-red-500 pl-3 text-sm">{formik.errors.password}</span>
+                            )}
+                            <span className="text-xs text-gray-500 pl-3 mt-1">Minimum 8 characters with one specila symbol.</span>
+                        </div>
+
+                        <div className="flex flex-col gap-2 mt-2">
+                            <label className="font-semibold">
+                                Register as
                             </label>
+
+                            <div className="grid grid-cols-3 gap-4">
+                                {/* Donor */}
+                                <button
+                                    type="button"
+                                    onClick={() => formik.setFieldValue('role', 'donor')}
+                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'donor'
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'bg-white text-black border-stroke'
+                                        }`}
+                                >
+                                    Donor
+                                </button>
+
+                                {/* Hospital */}
+                                <button
+                                    type="button"
+                                    onClick={() => formik.setFieldValue('role', 'hospital')}
+                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'hospital'
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'bg-white text-black border-stroke'
+                                        }`}
+                                >
+                                    Hospital
+                                </button>
+
+                                {/* Admin */}
+                                <button
+                                    type="button"
+                                    onClick={() => formik.setFieldValue('role', 'admin')}
+                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'admin'
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'bg-white text-black border-stroke'
+                                        }`}
+                                >
+                                    Admin
+                                </button>
+                            </div>
+
+                            {formik.touched.role && formik.errors.role && (
+                                <span className="text-red-500 text-sm pl-1">
+                                    {formik.errors.role}
+                                </span>
+                            )}
                         </div>
 
                         {/* Buttons */}
@@ -292,10 +273,10 @@ const Register: React.FC = () => {
 
                             <button
                                 type="submit"
-                                disabled={formik.isSubmitting}
+                                disabled={mutation.isPending}
                                 className="bg-primary text-white font-medium rounded-md h-[45px] cursor-pointer disabled:opacity-70 transition"
                             >
-                                {formik.isSubmitting ? 'Creating account...' : 'Create Account'}
+                                {mutation.isPending ? 'Creating account...' : 'Create Account'}
                             </button>
                             <Link to="/login" className="font-medium flex gap-1 self-end">
                                 Already have an account? <span className='text-primary font-bold'>Login</span>

@@ -1,0 +1,121 @@
+ bloodGroup: Yup.string()
+            .oneOf(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], 'Invalid blood group')
+            .required('Blood group is required'),
+
+             defection: Yup.string().required('Do you have any defection'),
+        age: Yup.number().required('Age is required'),
+        weight: Yup.number().required('Weight is required'),
+        lastDonation: Yup.string().required('Last donation date is required'),
+
+         <div className='grid grid-cols-2 lg:grid-cols-2 gap-3'>
+                                <div>
+                                    <label htmlFor="defection" className="font-semibold">Any defection?</label>
+                                    <select
+                                        id="defection"
+                                        name="defection"
+                                        value={formik.values.defection}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className={styles.input}
+                                    >
+                                        <option value="">Select an option</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                    {formik.touched.defection && formik.errors.defection && (
+                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.defection}</span>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label htmlFor="bloodGroup" className="font-semibold">Blood group</label>
+                                    <select
+                                        id="bloodGroup"
+                                        name="bloodGroup"
+                                        value={formik.values.bloodGroup}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className={styles.input}
+                                    >
+                                        <option value="">Select blood group</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div className='grid grid-cols-2 lg:grid-cols-2 gap-3'>
+                                <div className="flex flex-col space-y-1">
+                                    <label htmlFor="age" className="font-semibold">Age</label>
+                                    <input
+                                        type="text"
+                                        id="age"
+                                        name="age"
+                                        placeholder="Enter your age"
+                                        value={formik.values.age}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className={styles.input}
+                                    />
+                                    {formik.touched.age && formik.errors.age && (
+                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.age}</span>
+                                    )}
+                                </div>
+                                <div>
+                                    <label htmlFor="search" className='font-semibold text-sm'> Last time you Donated Blood?</label>
+                                    <input
+                                        type="text"
+                                        id='search'
+                                        name='lastDonation'
+                                        placeholder='Enter date of last donation'
+                                        value={formik.values.lastDonation}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className={styles.input}
+                                    />
+                                    {formik.touched.lastDonation && formik.errors.lastDonation && (
+                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.lastDonation}</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label htmlFor="address" className="font-semibold">Residential Address</label>
+                                <textarea
+                                    id="address"
+                                    name="address"
+                                    rows={2}
+                                    placeholder="Enter your address"
+                                    value={formik.values.address}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    className={`${styles.input} resize-none py-2`}
+                                />
+                                {formik.touched.address && formik.errors.address && (
+                                    <span className="text-red-500 pl-3 text-sm">{formik.errors.address}</span>
+                                )}
+                            </div>
+
+                              <div className="flex flex-col space-y-1">
+                                    <label htmlFor="weight" className="font-semibold">Weight</label>
+                                    <input
+                                        type="text"
+                                        id="weight"
+                                        name="weight"
+                                        placeholder="Enter your weight"
+                                        value={formik.values.weight}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className={styles.input}
+                                    />
+                                    {formik.touched.weight && formik.errors.weight && (
+                                        <span className="text-red-500 pl-3 text-sm">{formik.errors.weight}</span>
+                                    )}
+                                </div>

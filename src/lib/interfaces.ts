@@ -20,6 +20,15 @@ export interface NavItem {
   children?: NavChildItem[];
 }
 
+export interface RegisterFormValues {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    phone: string;
+    role: "donor" | "hospital" | "admin" | "";
+}
+
 export interface TableColumnProps<T = unknown> {
   label: string | React.ReactNode;
   key?: string;
