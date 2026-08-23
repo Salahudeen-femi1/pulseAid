@@ -11,17 +11,27 @@ export const registerService = async (values: RegisterFormValues) => {
     return response.data.data
 }
 
-export const verifyEmailService = async () => {
-    const response = await api.post('/v1/auth/verify-email')
-    return response
+export const verifyEmailService = async (token: string) => {
+    const response = await api.post('/v1/auth/verify-email', { token })
+    console.log(response)
+    return response.data
 }
 
-export const resendEmailService = async () => {
-    const response = await api.post('/v1/auth/resend-verification')
-    return response
+interface resendProp {
+    email: string;
+}
+
+export const resendEmailService = async (value: resendProp) => {
+    const response = await api.post('/v1/auth/resend-verification', { value })
+    return response.data
 }
 
 export const userService = async () => {
     const response = await api.post('/v1/auth/me')
+    return response
+}
+
+export const deleteUser = async () => {
+    const response = await api.delete('/')
     return response
 }

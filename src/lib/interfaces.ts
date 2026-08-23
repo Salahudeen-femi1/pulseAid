@@ -26,7 +26,7 @@ export interface RegisterFormValues {
     email: string;
     password: string;
     phone: string;
-    role: "donor" | "hospital" | "admin" | "";
+    role: "DONOR" | "HOSPITAL" | "ADMIN" | "";
 }
 
 export interface TableColumnProps<T = unknown> {

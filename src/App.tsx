@@ -8,6 +8,7 @@ import MainLayout from './layout/MainLayout'
 import UserDashboard from './pages/dashboard/UserDashboard'
 import Dashboard from './pages/dashboard/Dashboard'
 import Donors from './pages/dashboard/Donors'
+import EmailVerification from './pages/emailVerification/EmailVerification'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/emailVerification" element={<EmailVerification />} />
         <Route path="/dashboard/overview" element={
           <MainLayout
             pageName="UserDashboard"

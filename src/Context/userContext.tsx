@@ -104,6 +104,7 @@ export default function UserProvider({ children }: UserProviderProps) {
     }, [logout, refreshUser]);
 
     const login = async (token: string, user: UserProps, role: string) => {
+        console.log(user);
         try {
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user));

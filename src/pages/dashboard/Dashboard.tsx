@@ -10,6 +10,11 @@ import {
     Activity,
     CheckCircle,
 } from "lucide-react";
+import ConfirmDialog from "../../Components/modal/ConfirmDialog";
+import { useMutation } from "@tanstack/react-query";
+import { deleteUser } from "../../helper/authService";
+import { toast } from "sonner";
+import UserEditModal from "../../Components/modal/UserEditModal";
 
 export default function Dashboard() {
 
@@ -17,6 +22,8 @@ export default function Dashboard() {
     const [viewModal, setViewModal] = React.useState(false);
     const [deleteModal, setDeleteModal] = React.useState(false);
     const [selectedSale, setSelectedSale] = React.useState<any>(null);
+    const [ loading ] = React.useState(false)
+
 
     const columns = [
         {
@@ -46,9 +53,9 @@ export default function Dashboard() {
             render: (item: any) => (
                 <ActionCell
                     rowId={Number(item.id)}
-                    onEdit={() => setEditModal(true)}
-                    onView={() => setViewModal(true)}
-                    onDelete={() => setDeleteModal(true)}
+                    onEdit={() => { setSelectedSale(item); setEditModal(true); }}
+                    onView={() => { setSelectedSale(item); setViewModal(true); }}
+                    onDelete={() => { setSelectedSale(item); setDeleteModal(true); }}
                     toggleAction={() => setSelectedSale(item)}
                 />
             )
@@ -81,6 +88,18 @@ export default function Dashboard() {
             status: "Inactive",
         },
     ]
+
+
+    const deleMutation = useMutation({
+        mutationFn: deleteUser,
+        onSuccess: () => {
+            toast.success("user deleted succesfully")
+        }
+    })
+
+    const handleDelete = () => {
+        deleMutation.mutate()
+    }
 
     return (
         <div className="min-h-screen bg-[#FCF7F6]">
@@ -147,6 +166,33 @@ export default function Dashboard() {
                 </div>
 
             </main>
+
+            {deleteModal && (
+                <ConfirmDialog
+                    onCancel={() => setDeleteModal(false)}
+                    isOpen={deleteModal}
+                    onConfirm={handleDelete}
+                    isLoading={loading}
+                />
+            )}
+
+            {editModal && (
+                <UserEditModal data={selectedSale} onClose={() => setEditModal(false)} />
+            )}
+
+            {viewModal && selectedSale && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                    <div className="bg-white rounded-lg p-6 max-w-md w-full">
+                        <h3 className="text-lg font-semibold mb-2">View Donor</h3>
+                        <p className="mb-1"><strong>Name:</strong> {selectedSale.donor_name}</p>
+                        <p className="mb-1"><strong>Email:</strong> {selectedSale.email}</p>
+                        <p className="mb-1"><strong>Blood Group:</strong> {selectedSale.blood_group}</p>
+                        <div className="mt-4 flex justify-end">
+                            <button className="px-4 py-2 bg-gray-200 rounded mr-2" onClick={() => setViewModal(false)}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );

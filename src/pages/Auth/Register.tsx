@@ -9,6 +9,7 @@ import { registerService } from '../../helper/authService';
 import type { UserProps } from '../../Context/userContext';
 import { toast } from 'sonner';
 import type { RegisterFormValues } from '../../lib/interfaces';
+import axios from 'axios';
 
 const Register: React.FC = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -22,13 +23,19 @@ const Register: React.FC = () => {
                 toast.success("Registration successful")
                 console.log("login response", response)
 
-                navigate('/EmailVerification')
+                navigate('/emailVerification')
             },
-            onError: (error) => {
-                toast.error(error?.response?.data?.message || "Something went wrong")
-                console.log('registration error:', error)
-            }
+            onError: (error: unknown) => {
+                if (axios.isAxiosError(error)) {
+                    toast.error(
+                        error.response?.data?.message || "Something went wrong"
+                    );
 
+                    console.log(error.response?.data);
+                } else {
+                    toast.error("Something went wrong");
+                }
+            }
         })
 
     const validationSchema = Yup.object({
@@ -64,10 +71,6 @@ const Register: React.FC = () => {
 
     }
 
-    // const validationSchema = () => {
-    //     if()
-    // }
-
     const formik = useFormik<RegisterFormValues>({
         initialValues: {
             firstName: '',
@@ -82,7 +85,7 @@ const Register: React.FC = () => {
             const payload = {
                 ...values,
                 phone: formatNigerianPhone(values.phone),
-                role: values.role.toUpperCase()
+                role: values.role
             }
             mutation.mutate(payload)
             console.log('Form values:', values);
@@ -228,7 +231,7 @@ const Register: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => formik.setFieldValue('role', 'donor')}
-                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'donor'
+                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'DONOR'
                                         ? 'bg-primary text-white border-primary'
                                         : 'bg-white text-black border-stroke'
                                         }`}
@@ -240,7 +243,7 @@ const Register: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => formik.setFieldValue('role', 'hospital')}
-                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'hospital'
+                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'HOSPITAL'
                                         ? 'bg-primary text-white border-primary'
                                         : 'bg-white text-black border-stroke'
                                         }`}
@@ -252,7 +255,7 @@ const Register: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => formik.setFieldValue('role', 'admin')}
-                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'admin'
+                                    className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'ADMIN'
                                         ? 'bg-primary text-white border-primary'
                                         : 'bg-white text-black border-stroke'
                                         }`}
@@ -284,7 +287,7 @@ const Register: React.FC = () => {
                         </div>
                     </form>
                 </div>
-            </div >
+            </div>
         </div >
     );
 };

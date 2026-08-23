@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useUser } from '../../Context/userContext'
 import { useMutation } from '@tanstack/react-query'
-import { verifyEmailService } from '../../helper/authService'
+import { resendEmailService, verifyEmailService } from '../../helper/authService'
 import { toast } from 'sonner'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import axios from 'axios'
 
 export default function EmailVerification() {
 
     const navigate = useNavigate()
     const { user } = useUser()
+    console.log("user", user)
 
     const [searchParams] = useSearchParams()
     const token = searchParams.get("token")
@@ -19,13 +21,19 @@ export default function EmailVerification() {
             toast.success("Email verified successfully")
             console.log("email response", response)
 
-            navigate('/Login')
+            navigate('/login')
         },
-         onError: (error) => {
-            toast.error(error?.response?.data?.message || "Something went wrong")
-            console.log('registration error:', error)
-        }
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                toast.error(
+                    error.response?.data?.message || "Something went wrong"
+                );
 
+                console.log(error.response?.data);
+            } else {
+                toast.error("Something went wrong");
+            }
+        }
     })
 
     useEffect(() => {
@@ -33,6 +41,38 @@ export default function EmailVerification() {
             mutation.mutate(token);
         }
     }, [token]);
+
+
+    const resendMutation = useMutation({
+        mutationFn: resendEmailService,
+        onSuccess: async () => {
+            toast.success("Verification email sent succesfully")
+        },
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                toast.error(
+                    error.response?.data?.message || "Something went wrong"
+                );
+
+                console.log(error.response?.data);
+            } else {
+                toast.error("Something went wrong");
+            }
+        }
+    },
+    )
+
+    if (!user?.email) {
+        toast.error("Email address not found");
+        return;
+    }
+
+    const handleResendMessage = () => {
+        resendMutation.mutate({
+            email: user.email
+        });
+
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-fadedPrimary px-4">
@@ -79,13 +119,17 @@ export default function EmailVerification() {
                     </p>
 
                     <button
+                        onClick={handleResendMessage}
+                        disabled={resendMutation.isPending}
                         type="button"
                         className="mt-2 font-semibold text-primary hover:underline"
                     >
-                        Resend verification email
+                        {
+                            resendMutation.isPending ?
+                                "sending..." : "Resend verification email"
+                        }
                     </button>
                 </div>
-
             </div>
         </div>
     )

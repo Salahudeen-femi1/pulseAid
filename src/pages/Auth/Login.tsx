@@ -5,9 +5,11 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { assets } from '../../assets/assets';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../Context/userContext';
+import type { UserProps } from '../../Context/userContext';
 import { useMutation } from '@tanstack/react-query'
 import { loginService } from '../../helper/authService';
 import { toast } from 'sonner';
+import axios from 'axios';
 
 const Login: React.FC = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -15,7 +17,7 @@ const Login: React.FC = () => {
     const { login } = useUser()
     const navigate = useNavigate()
     const mutation = useMutation<
-        { token: string; user: { role: string } },
+        { token: string; user: UserProps },
         unknown,
         { email: string; password: string }
     >({
@@ -37,8 +39,15 @@ const Login: React.FC = () => {
             }
         },
         onError: (error) => {
-            toast.error(error?.response?.data?.message || "Something went wrong")
-            console.log('registration error:', error)
+            if (axios.isAxiosError(error)) {
+                toast.error(
+                    error.response?.data?.message || "Something went wrong"
+                );
+
+                console.log(error.response?.data);
+            } else {
+                toast.error("Something went wrong");
+            }
         }
 
     })
