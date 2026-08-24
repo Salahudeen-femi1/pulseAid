@@ -5,8 +5,8 @@ import { BiDonateBlood } from "react-icons/bi";
 export default function HeroSection() {
     return (
         <div className=''>
-            <div className='bg-fadedPrimary px-10 grid grid-cols-2 '>
-                <div className=' flex flex-col gap-6 justify-center '>
+            <div className='bg-fadedPrimary px-10 grid grid-cols-1 lg:grid-cols-2 '>
+                <div className=' flex flex-col lg-flex-row md:flex-row gap-6 justify-center '>
                     <h2 className='text-6xl font-semibold'>
                         Find Blood <span className='text-primary'>Donor</span><br /> Near You
                     </h2>

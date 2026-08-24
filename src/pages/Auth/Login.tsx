@@ -16,6 +16,7 @@ const Login: React.FC = () => {
 
     const { login } = useUser()
     const navigate = useNavigate()
+
     const mutation = useMutation<
         { token: string; user: UserProps },
         unknown,
@@ -81,6 +82,13 @@ const Login: React.FC = () => {
             : 'border-[#FBFCFB3]'
             } placeholder-black rounded-md px-4 h-[50px] border text-sm w-full outline-0`,
     };
+
+    
+    // if(user?.status === "PENDING" || user?.isEmailVerified === false){
+    //     return (
+    //         navigate("/EmailVerification")
+    //     )
+    // }
 
     return (
         <div className="flex items-center">

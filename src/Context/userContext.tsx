@@ -8,6 +8,8 @@ export interface UserProps {
     email: string;
     phone: string;
     role: string;
+    status?: "PENDING" | "SUCCESS" | "";
+    isEmailVerified?: boolean;
 }
 
 interface UserProviderProps {
