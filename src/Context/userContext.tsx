@@ -54,13 +54,11 @@ export default function UserProvider({ children }: UserProviderProps) {
             if (!authToken) throw new Error("No token");
 
             try {
-                const response = await api.get("/v1/auth/refresh", {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                });
+                const response = await api.get("/v1/users/me");
+                console.log("response:", response)
 
-                localStorage.setItem("quickMetrics", JSON.stringify(response.data));
+                localStorage.setItem("user", JSON.stringify(response.data));
+                setUser(response.data);
             } catch (err: unknown) {
                 console.error("Failed to refresh user:", err);
                 if (err && typeof err === "object" && "response" in err) {

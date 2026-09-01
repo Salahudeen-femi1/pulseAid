@@ -8,7 +8,7 @@ import MainLayout from './layout/MainLayout'
 import UserDashboard from './pages/dashboard/UserDashboard'
 import Dashboard from './pages/dashboard/Dashboard'
 import Donors from './pages/dashboard/Donors'
-import EmailVerification from './pages/emailVerification/EmailVerification'
+import EmailVerification from './pages/emailVerification/ResendEmai.tsx'
 
 function App() {
 

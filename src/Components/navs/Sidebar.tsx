@@ -42,6 +42,11 @@ const Sidebar = ({
     logout();
   };
 
+  const filteredLinks = navItems.filter(
+    (navlink) => navlink.role === user?.role && !navlink.hidden
+  );
+
+
   return (
     <div
       className={`
@@ -69,7 +74,7 @@ const Sidebar = ({
       <ul
         className={`${isExpanded ? "ps-4" : "ps-2"} lg:mt-4 mt-4 flex flex-col gap-3 h-4/5 overflow-y-hidden no-scrollbar pb-6`}
       >
-        {navItems
+        {filteredLinks
           // .filter((navitem) => matchesRole(navitem.role))
           .map((item, index) => {
             const isOpen = openMenu === item.name;

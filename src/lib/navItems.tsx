@@ -8,25 +8,25 @@ export const navItems: NavItem[] = [
         name: "Dashboard",
         icon: MdDashboard,
         path: "/dashboard/overview",
-        // role: ["user", "admin"],
+        role: ["user"],
     },
     {
         name: "Dashboard",
         icon: MdDashboard,
         path: "/admin/overview",
-        // role: 'admin',
+        role: 'admin',
     },
     {
         name: 'Donors',
         icon: MdBloodtype,
-        path: "/admin/donors",
-        // role: ["user", "admin"]
+        path: "/dashboard/donors",
+        role: ["admin"]
     },
     {
         name: 'Profile',
         icon: CgProfile,
         path: "/dashboard/profile",
-        // role:"admin"
+        role:["admin", "user"]
     },
     
 

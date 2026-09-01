@@ -16,7 +16,8 @@ export interface NavItem {
   name: string;
   icon: IconType;
   path?: string;
-  // role: string | string[];
+  role: string | string[];
+  hidden?: boolean;
   children?: NavChildItem[];
 }
 
@@ -26,7 +27,7 @@ export interface RegisterFormValues {
     email: string;
     password: string;
     phone: string;
-    role: "DONOR" | "HOSPITAL" | "ADMIN" | "";
+    role: "DONOR" | "HOSPITAL";
 }
 
 export interface TableColumnProps<T = unknown> {

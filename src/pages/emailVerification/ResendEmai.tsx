@@ -1,46 +1,12 @@
-import { useEffect } from 'react'
-import { useUser } from '../../Context/userContext'
 import { useMutation } from '@tanstack/react-query'
-import { resendEmailService, verifyEmailService } from '../../helper/authService'
+import { resendEmailService } from '../../helper/authService'
 import { toast } from 'sonner'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+// import { useSearchParams } from 'react-router-dom'
 import axios from 'axios'
 
-export default function EmailVerification() {
-
-    const navigate = useNavigate()
-    const { user } = useUser()
-    console.log("user", user)
-
-    const [searchParams] = useSearchParams()
-    const token = searchParams.get("token")
-
-    const mutation = useMutation({
-        mutationFn: verifyEmailService,
-        onSuccess: async (response) => {
-            toast.success("Email verified successfully")
-            console.log("email response", response)
-
-            navigate('/login')
-        },
-        onError: (error) => {
-            if (axios.isAxiosError(error)) {
-                toast.error(
-                    error.response?.data?.message || "Something went wrong"
-                );
-
-                console.log(error.response?.data);
-            } else {
-                toast.error("Something went wrong");
-            }
-        }
-    })
-
-    useEffect(() => {
-        if (token) {
-            mutation.mutate(token);
-        }
-    }, [token]);
+export default function ResendEmail() {
+    // const [searchParams] = useSearchParams()
+    const email = localStorage.getItem('verificationEmail')
 
 
     const resendMutation = useMutation({
@@ -62,16 +28,14 @@ export default function EmailVerification() {
     },
     )
 
-    if (!user?.email) {
-        toast.error("Email address not found");
-        return;
-    }
-
     const handleResendMessage = () => {
+        if (!email) {
+            toast.error("Email not found");
+            return;
+        }
         resendMutation.mutate({
-            email: user.email
+            email: email
         });
-
     }
 
     return (
@@ -100,11 +64,7 @@ export default function EmailVerification() {
                 </h1>
 
                 <p className="mt-3 text-sm text-gray-600">
-                    We've sent a verification link to
-                </p>
-
-                <p className="mt-1 font-semibold text-primary">
-                    {user?.email}
+                    We've sent a verification link to your email
                 </p>
 
                 <p className="mt-4 text-sm text-gray-500">

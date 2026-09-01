@@ -5,7 +5,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { assets } from '../../assets/assets';
 import { useMutation } from '@tanstack/react-query';
-import { registerService } from '../../helper/authService';
+import { registerService, resendEmailService } from '../../helper/authService';
 import type { UserProps } from '../../Context/userContext';
 import { toast } from 'sonner';
 import type { RegisterFormValues } from '../../lib/interfaces';
@@ -17,11 +17,24 @@ const Register: React.FC = () => {
     const navigate = useNavigate()
 
     const mutation = useMutation<
-        { message?: string; token: string; user?: UserProps; role?: string; }, Error, RegisterFormValues>({
+        { message?: string; token: string; user?: UserProps; role?: string; email: string; }, Error, RegisterFormValues>({
             mutationFn: registerService,
             onSuccess: async (response) => {
                 toast.success("Registration successful")
                 console.log("login response", response)
+                
+                const email = response?.email
+                if(email){
+                    localStorage.setItem("verificationEmail", email)
+                    // Send verification email
+                    console.log("email sent and saved")
+                    try {
+                        await resendEmailService({ email })
+                        toast.success("Verification email sent")
+                    } catch (error) {
+                        console.error("Failed to send verification email:", error)
+                    }
+                }
 
                 navigate('/emailVerification')
             },
@@ -52,7 +65,7 @@ const Register: React.FC = () => {
             .min(8, 'Password must be at least 8 characters')
             .required('Password is required'),
         phone: Yup.number().required('Phone number is required'),
-        role: Yup.string().oneOf(['donor', "hospital", "admin"], 'Please select a role')
+        role: Yup.string().oneOf(['DONOR', "HOSPITAL"], 'Please select a role')
             .required('Please select a role'),
     });
 
@@ -85,7 +98,6 @@ const Register: React.FC = () => {
             const payload = {
                 ...values,
                 phone: formatNigerianPhone(values.phone),
-                role: values.role
             }
             mutation.mutate(payload)
             console.log('Form values:', values);
@@ -157,8 +169,6 @@ const Register: React.FC = () => {
                                 )}
                             </div>
 
-
-
                             <div className="flex flex-col space-y-1">
                                 <label htmlFor="phone" className="font-semibold">Phone number</label>
                                 <input
@@ -226,11 +236,11 @@ const Register: React.FC = () => {
                                 Register as
                             </label>
 
-                            <div className="grid grid-cols-3 gap-4">
+                            <div className="grid grid-cols-2 gap-4">
                                 {/* Donor */}
                                 <button
                                     type="button"
-                                    onClick={() => formik.setFieldValue('role', 'donor')}
+                                    onClick={() => formik.setFieldValue('role', 'DONOR')}
                                     className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'DONOR'
                                         ? 'bg-primary text-white border-primary'
                                         : 'bg-white text-black border-stroke'
@@ -242,7 +252,7 @@ const Register: React.FC = () => {
                                 {/* Hospital */}
                                 <button
                                     type="button"
-                                    onClick={() => formik.setFieldValue('role', 'hospital')}
+                                    onClick={() => formik.setFieldValue('role', 'HOSPITAL')}
                                     className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'HOSPITAL'
                                         ? 'bg-primary text-white border-primary'
                                         : 'bg-white text-black border-stroke'
@@ -252,7 +262,7 @@ const Register: React.FC = () => {
                                 </button>
 
                                 {/* Admin */}
-                                <button
+                                {/* <button
                                     type="button"
                                     onClick={() => formik.setFieldValue('role', 'admin')}
                                     className={`h-[50px] rounded-md border font-medium transition ${formik.values.role === 'ADMIN'
@@ -261,7 +271,7 @@ const Register: React.FC = () => {
                                         }`}
                                 >
                                     Admin
-                                </button>
+                                </button> */}
                             </div>
 
                             {formik.touched.role && formik.errors.role && (
