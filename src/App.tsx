@@ -9,6 +9,7 @@ import UserDashboard from './pages/dashboard/UserDashboard'
 import Dashboard from './pages/dashboard/Dashboard'
 import Donors from './pages/dashboard/Donors'
 import EmailVerification from './pages/emailVerification/ResendEmai.tsx'
+import VerifyEmail from './pages/emailVerification/verify-email.tsx'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/emailVerification" element={<EmailVerification />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/dashboard/overview" element={
           <MainLayout
             pageName="UserDashboard"
