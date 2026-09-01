@@ -18,7 +18,7 @@ interface VerifyEmailProp {
 export const verifyEmailService = async (value: VerifyEmailProp) => {
     const response = await api.post('/v1/auth/verify-email', value)
     console.log(response)
-    return response.data
+    return response.data.data
 }
 
 interface resendProp {

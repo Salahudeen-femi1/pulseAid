@@ -19,9 +19,9 @@ export default function VerifyEmail() {
             toast.success("Email verified successfully");
             console.log("email response:", response);
 
-            localStorage.removeItem("verificationEmail");
-
-            navigate("/login");
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000);
         },
 
         onError: (error) => {
@@ -44,11 +44,9 @@ export default function VerifyEmail() {
     }, [token]);
 
     return (
-        <div className='relative'>
-            <div className='absolute inset-0 bg-black/80 '></div>
-
-            <div className="size-8 mx-auto my-6 border-4 border-t-transparent border-primary animate-spin rounded-full"></div>
-
+        <div className="fixed inset-0 z-50 flex flex-col gap-7 items-center justify-center bg-black/50">
+            <div className="size-20 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+            <p className="text-lg font-medium text-white">Verifying your email...</p>
         </div>
     )
 }
