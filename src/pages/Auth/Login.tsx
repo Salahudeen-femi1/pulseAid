@@ -18,14 +18,25 @@ const Login: React.FC = () => {
     const navigate = useNavigate()
 
     const mutation = useMutation<
-        { token: string; user: UserProps },
+        { token: string; user: UserProps, isVerified: boolean },
         unknown,
         { email: string; password: string }
     >({
         mutationFn: loginService,
         onSuccess: async (response) => {
-            toast.success("Login successfully")
             console.log("login response", response)
+
+            if (!response.user) {
+                toast.error("User not found. Please register.");
+                navigate("/register");
+                return;
+            }
+
+            if (!response.isVerified) {
+                toast.error("Your account is not verified.");
+                navigate("/verify-email");
+                return;
+            }
 
             await login(
                 response.token,
@@ -33,10 +44,16 @@ const Login: React.FC = () => {
                 response.user.role
             )
 
-            if (response.user.role === "donor") {
-                navigate("/dashboard");
-            } else {
+            if (response.user.role === "admin") {
+                toast.success("Login successfully")
                 navigate("/admin/dashboard");
+                return;
+            }
+
+            if (response.user.role === "donor") {
+                toast.success("Login successfully")
+                navigate("/dashboard");
+                return;
             }
         },
         onError: (error) => {
@@ -70,9 +87,7 @@ const Login: React.FC = () => {
         validationSchema,
         onSubmit: async (values, { setSubmitting }) => {
             setSubmitting(true)
-            mutation.mutate(values, {
-                onSettled: () => setSubmitting(false),
-            })
+            mutation.mutate(values)
         },
     });
 
@@ -83,7 +98,7 @@ const Login: React.FC = () => {
             } placeholder-black rounded-md px-4 h-[50px] border text-sm w-full outline-0`,
     };
 
-    
+
     // if(user?.status === "PENDING" || user?.isEmailVerified === false){
     //     return (
     //         navigate("/EmailVerification")

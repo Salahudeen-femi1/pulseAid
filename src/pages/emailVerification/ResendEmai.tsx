@@ -9,7 +9,6 @@ export default function ResendEmail() {
     // const [searchParams] = useSearchParams()
     const email = localStorage.getItem('verificationEmail')
 
-
     const resendMutation = useMutation({
         mutationFn: resendEmailService,
         onSuccess: async () => {
